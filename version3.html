@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Window Cleaning Estimator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 40px;
+    }
+    .calculator {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .calculator h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      flex: 1;
+    }
+    .form-group input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      text-align: right;
+    }
+    .total, .monthly-breakdown {
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .monthly-breakdown {
+      color: green;
+    }
+    .toggle-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button.toggle {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="toggle-container">
+      <button class="toggle" onclick="togglePlan()">Toggle Monthly View</button>
+    </div>
+
+    <div id="pricingView">
+      <h2>One-Time Service Estimate</h2>
+
+      <div class="form-group">
+        <label for="exterior">Exterior Window Cleaning ($)</label>
+        <input type="number" id="exterior" oninput="calculate()" />
+      </div>
+
+      <div class="form-group">
+        <label for="interior">Full Window Cleaning (auto ×2)</label>
+        <input type="number" id="interior" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="solar">Solar Panel Cleaning ($)</label>
+        <input type="number" id="solar" oninput="calculate()" />
+      </div>
+
+      <div class="form-group">
+        <label for="gutter">Gutter Cleaning ($)</label>
+        <input type="number" id="gutter" oninput="calculate()" />
+      </div>
+
+      <div class="form-group">
+        <label for="driveway">Pressure Wash Driveway ($)</label>
+        <input type="number" id="driveway" oninput="calculate()" />
+      </div>
+
+      <div class="form-group">
+        <label for="softwash">Soft Wash House ($)</label>
+        <input type="number" id="softwash" oninput="calculate()" />
+      </div>
+
+      <div class="form-group">
+        <label for="roof">Roof Wash Maintenance ($)</label>
+        <input type="number" id="roof" oninput="calculate()" />
+      </div>
+
+      <div class="total">
+        One-Time Total: $<span id="total">0.00</span>
+      </div>
+
+      <div id="monthlyPlan" style="display:none;">
+        <div class="monthly-breakdown">
+          <p>✅ Annual Maintenance Plan Includes:</p>
+          <ul style="text-align:left; padding-left: 40px;">
+            <li>2 Exterior Window Cleanings</li>
+            <li>2 Full (In & Out) Window Cleanings</li>
+            <li>2 Solar Panel Cleanings</li>
+            <li>2 Gutter Cleanings</li>
+            <li>1 Roof Wash</li>
+            <li>1 Driveway Pressure Wash</li>
+            <li>1 Soft Wash House</li>
+          </ul>
+          <p>Annual Plan Total: $<span id="annualTotal">0.00</span></p>
+          <p>Monthly Price: $<span id="monthlyPrice">0.00</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let monthlyVisible = false;
+
+    function togglePlan() {
+      monthlyVisible = !monthlyVisible;
+      document.getElementById('monthlyPlan').style.display = monthlyVisible ? 'block' : 'none';
+    }
+
+    function getVal(id) {
+      return parseFloat(document.getElementById(id).value) || 0;
+    }
+
+    function calculate() {
+      const exterior = getVal('exterior');
+      const interior = exterior * 2;
+      document.getElementById('interior').value = interior.toFixed(2);
+
+      const solar = getVal('solar');
+      const gutter = getVal('gutter');
+      const driveway = getVal('driveway');
+      const softwash = getVal('softwash');
+      const roof = getVal('roof');
+
+      // One-time total
+      const total = interior + solar + gutter + driveway + softwash + roof;
+      document.getElementById('total').innerText = total.toFixed(2);
+
+      // Monthly Plan (fixed quantities)
+      const annualTotal =
+        (exterior * 2) +
+        (interior * 2) +
+        (solar * 2) +
+        (gutter * 2) +
+        driveway +
+        softwash +
+        roof;
+
+      const monthly = annualTotal / 12;
+      document.getElementById('annualTotal').innerText = annualTotal.toFixed(2);
+      document.getElementById('monthlyPrice').innerText = monthly.toFixed(2);
+    }
+  </script>
+</body>
+</html>
