@@ -2,127 +2,199 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Window Cleaning Estimator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Service Quote Estimator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
     }
+
     .calculator {
       max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
     }
-    .calculator h2 {
+
+    h2 {
       text-align: center;
+      color: #0b5ed7;
+      margin-bottom: 20px;
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .headline {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 24px;
+      color: #222;
+      font-weight: 600;
+    }
+
+    .form-group {
       margin-bottom: 20px;
     }
-    .form-group {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      flex: 1;
-    }
-    .form-group input {
-      flex: 1;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      text-align: right;
-    }
-    .total, .monthly-breakdown {
-      font-size: 1.2em;
+
+    label {
+      display: block;
+      font-size: 1.1em;
       font-weight: bold;
+      margin-bottom: 8px;
+      color: #0b5ed7;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-size: 1.2em;
+    }
+
+    .summary {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 30px;
     }
-    .monthly-breakdown {
-      color: green;
+
+    .total, .monthly-price {
+      font-size: 1.8em;
+      font-weight: bold;
+      margin: 14px 0;
+      color: #0b5ed7;
     }
+
     .toggle-container {
       text-align: center;
-      margin-bottom: 20px;
+      margin: 28px 0 10px;
     }
-    button.toggle {
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
+
+    .toggle {
+      padding: 14px 28px;
+      font-size: 1.1em;
       border: none;
-      border-radius: 6px;
+      border-radius: 30px;
+      background-color: #0b5ed7;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle:hover {
+      background-color: #0846a3;
+    }
+
+    ul {
+      text-align: left;
+      margin: 0;
+      padding-left: 24px;
+      font-size: 1.1em;
+    }
+
+    .highlight {
+      background: #e0f3ff;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 16px;
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    .price-breakdown {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #444;
+    }
+
+    @media (max-width: 600px) {
+      .calculator {
+        margin: 10px;
+        padding: 18px;
+      }
+
+      input {
+        font-size: 1.1em;
+      }
+
+      h2 {
+        font-size: 1.6em;
+      }
     }
   </style>
 </head>
 <body>
   <div class="calculator">
-    <div class="toggle-container">
-      <button class="toggle" onclick="togglePlan()">Toggle Monthly View</button>
+    <h2>Get Your Spotless Home Quote!</h2>
+    <div class="headline">Crystal-clear windows. Pristine solar panels. Gutters flowing perfectly. Your home deserves this!</div>
+
+    <div class="form-group">
+      <label for="exterior">Exterior Window Cleaning ($)</label>
+      <input type="number" id="exterior" oninput="calculate()">
     </div>
 
-    <div id="pricingView">
-      <h2>One-Time Service Estimate</h2>
+    <div class="form-group">
+      <label for="interior">Full Window Cleaning (auto ×2)</label>
+      <input type="number" id="interior" readonly>
+    </div>
 
-      <div class="form-group">
-        <label for="exterior">Exterior Window Cleaning ($)</label>
-        <input type="number" id="exterior" oninput="calculate()" />
-      </div>
+    <div class="form-group">
+      <label for="solar">Solar Panel Cleaning ($)</label>
+      <input type="number" id="solar" oninput="calculate()">
+    </div>
 
-      <div class="form-group">
-        <label for="interior">Full Window Cleaning (auto ×2)</label>
-        <input type="number" id="interior" readonly />
-      </div>
+    <div class="form-group">
+      <label for="gutter">Gutter Cleaning ($)</label>
+      <input type="number" id="gutter" oninput="calculate()">
+    </div>
 
-      <div class="form-group">
-        <label for="solar">Solar Panel Cleaning ($)</label>
-        <input type="number" id="solar" oninput="calculate()" />
-      </div>
+    <div class="form-group">
+      <label for="driveway">Pressure Wash Driveway ($)</label>
+      <input type="number" id="driveway" oninput="calculate()">
+    </div>
 
-      <div class="form-group">
-        <label for="gutter">Gutter Cleaning ($)</label>
-        <input type="number" id="gutter" oninput="calculate()" />
-      </div>
+    <div class="form-group">
+      <label for="softwash">Soft Wash House ($)</label>
+      <input type="number" id="softwash" oninput="calculate()">
+    </div>
 
-      <div class="form-group">
-        <label for="driveway">Pressure Wash Driveway ($)</label>
-        <input type="number" id="driveway" oninput="calculate()" />
-      </div>
+    <div class="form-group">
+      <label for="roof">Roof Wash Maintenance ($)</label>
+      <input type="number" id="roof" oninput="calculate()">
+    </div>
 
-      <div class="form-group">
-        <label for="softwash">Soft Wash House ($)</label>
-        <input type="number" id="softwash" oninput="calculate()" />
-      </div>
+    <div class="summary">
+      <div class="total">One-Time Total: $<span id="total">0.00</span></div>
+    </div>
 
-      <div class="form-group">
-        <label for="roof">Roof Wash Maintenance ($)</label>
-        <input type="number" id="roof" oninput="calculate()" />
-      </div>
+    <div class="toggle-container">
+      <button class="toggle" onclick="togglePlan()">💡 See Our Popular Monthly Plan</button>
+    </div>
 
-      <div class="total">
-        One-Time Total: $<span id="total">0.00</span>
-      </div>
-
-      <div id="monthlyPlan" style="display:none;">
-        <div class="monthly-breakdown">
-          <p>✅ Annual Maintenance Plan Includes:</p>
-          <ul style="text-align:left; padding-left: 40px;">
-            <li>2 Exterior Window Cleanings</li>
-            <li>2 Full (In & Out) Window Cleanings</li>
-            <li>2 Solar Panel Cleanings</li>
-            <li>2 Gutter Cleanings</li>
-            <li>1 Roof Wash</li>
-            <li>1 Driveway Pressure Wash</li>
-            <li>1 Soft Wash House</li>
+    <div id="monthlyPlan" style="display:none">
+      <div class="summary">
+        <div class="highlight">
+          <strong>What's Included in the Annual Plan:</strong>
+          <ul>
+            <li>✔️ 2 Exterior Window Cleanings</li>
+            <li>✔️ 2 Full (Inside + Outside) Window Cleanings</li>
+            <li>✔️ 2 Solar Panel Cleanings</li>
+            <li>✔️ 2 Gutter Cleanings</li>
+            <li>✔️ 1 Roof Wash Maintenance</li>
+            <li>✔️ 1 Driveway Pressure Wash</li>
+            <li>✔️ 1 Full Soft Wash House</li>
           </ul>
-          <p>Annual Plan Total: $<span id="annualTotal">0.00</span></p>
-          <p>Monthly Price: $<span id="monthlyPrice">0.00</span></p>
+          <p class="price-breakdown">Split across the year with scheduled service visits to keep your home looking perfect — all year round.</p>
         </div>
+        <div class="monthly-price">Annual Total: $<span id="annualTotal">0.00</span></div>
+        <div class="monthly-price">Just $<span id="monthlyPrice">0.00</span>/month</div>
+        <p style="margin-top: 8px; font-weight: 500;">For the low, LOW price — enjoy year-round peace of mind and curb appeal.</p>
       </div>
     </div>
   </div>
@@ -150,23 +222,14 @@
       const softwash = getVal('softwash');
       const roof = getVal('roof');
 
-      // One-time total
-      const total = interior + solar + gutter + driveway + softwash + roof;
-      document.getElementById('total').innerText = total.toFixed(2);
+      const oneTimeTotal = interior + solar + gutter + driveway + softwash + roof;
+      document.getElementById('total').innerText = oneTimeTotal.toFixed(2);
 
-      // Monthly Plan (fixed quantities)
-      const annualTotal =
-        (exterior * 2) +
-        (interior * 2) +
-        (solar * 2) +
-        (gutter * 2) +
-        driveway +
-        softwash +
-        roof;
+      const annualTotal = (exterior * 2) + (interior * 2) + (solar * 2) + (gutter * 2) + driveway + softwash + roof;
+      const monthlyPrice = annualTotal / 12;
 
-      const monthly = annualTotal / 12;
       document.getElementById('annualTotal').innerText = annualTotal.toFixed(2);
-      document.getElementById('monthlyPrice').innerText = monthly.toFixed(2);
+      document.getElementById('monthlyPrice').innerText = monthlyPrice.toFixed(2);
     }
   </script>
 </body>
