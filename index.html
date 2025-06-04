@@ -1,53 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <title>Window Cleaning Service</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        .btn {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1.25rem;
-            padding: 15px 30px;
-            margin: 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quarterly Service Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #fdf6ec;
+      color: #072040;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .hidden {
+      display: none;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: #28668D;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.5rem;
+      border: 2px solid #28668D;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    button {
+      background-color: #28668D;
+      color: #fdf6ec;
+      border: none;
+      padding: 1rem;
+      font-size: 1.5rem;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+    }
+    .package {
+      background-color: #BAA974;
+      padding: 1.5rem;
+      border-radius: 5px;
+      margin-bottom: 2rem;
+      color: #072040;
+    }
+    .package h2 {
+      margin-top: 0;
+      color: #072040;
+      font-size: 1.75rem;
+    }
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      color: #072040;
+    }
+    .note {
+      font-size: 1rem;
+      color: #072040;
+    }
+    .monthly-box {
+      background-color: #28668D;
+      color: white;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      font-size: 1.25rem;
+    }
+    li {
+      margin-bottom: 0.75rem;
+    }
+    .strike {
+      text-decoration: line-through;
+      color: #444;
+    }
+    .included {
+      font-weight: bold;
+      color: #28668D;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="logo.png" alt="Logo" class="logo"> <!-- Replace with the path to your logo -->
-        <h1>Welcome to Our Window Cleaning Service!</h1>
-        <p>Select the version you'd like to explore:</p>
-        <div>
-            <a href="version1/index.html" class="btn">Quarterly Exterior Package Calculator</a>
-            <a href="version2/index.html" class="btn">Monthly Service Package Premium Calc</a>
-        </div>
+  <div class="container">
+    <div id="step1">
+      <h1>Enter Pane Count</h1>
+      <input type="number" id="paneCount" placeholder="Number of Panes" min="1">
+      <button onclick="showPackages()">Show Service Options</button>
     </div>
+
+    <div id="step2" class="hidden">
+      <h1>Select Your Plan</h1>
+
+      <div class="package">
+        <h2>Exterior Essentials Plan</h2>
+        <ul id="exteriorDetails"></ul>
+        <div class="price" id="exteriorTotal"></div>
+        <div class="note" id="exteriorTotalWithBonus"></div>
+        <div class="monthly-box" id="exteriorMonthly"></div>
+      </div>
+
+      <div class="package">
+        <h2>VIP Inside & Out Plan</h2>
+        <ul id="vipDetails"></ul>
+        <div class="price" id="vipTotal"></div>
+        <div class="note" id="vipTotalWithBonus"></div>
+        <div class="monthly-box" id="vipMonthly"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showPackages() {
+      const paneCount = parseInt(document.getElementById('paneCount').value);
+      if (!paneCount || paneCount <= 0) {
+        alert('Please enter a valid pane count.');
+        return;
+      }
+
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+
+      const exteriorPerService = paneCount * 8;
+      const exteriorTotal = exteriorPerService * 4;
+      const exteriorBonus = exteriorPerService;
+      const exteriorMonthly = Math.round((exteriorTotal / 12) * 100) / 100;
+
+      const vipPerService = paneCount * 16;
+      const vipTotal = vipPerService * 4;
+      const vipBonus = 450;
+      const vipMonthly = Math.round((vipTotal / 12) * 100) / 100;
+
+      document.getElementById('exteriorDetails').innerHTML = `
+        <li>4 Quarterly Exterior Cleanings @ $${exteriorPerService.toFixed(2)} each</li>
+        <li><span class="strike">1 Bonus Interior Cleaning ($${exteriorBonus.toFixed(2)})</span> <span class="included">Included Free</span></li>
+      `;
+      document.getElementById('exteriorTotal').textContent = `Total: $${exteriorTotal.toFixed(2)}`;
+      document.getElementById('exteriorTotalWithBonus').textContent = `Would be $${(exteriorTotal + exteriorBonus).toFixed(2)} with bonus individually`;
+      document.getElementById('exteriorMonthly').textContent = `$${exteriorMonthly.toFixed(2)} per month`;
+
+      document.getElementById('vipDetails').innerHTML = `
+        <li>4 Quarterly Inside & Out Cleanings @ $${vipPerService.toFixed(2)} each</li>
+        <li><span class="strike">Bonus Services ($${vipBonus.toFixed(2)})</span> <span class="included">Included Free</span></li>
+      `;
+      document.getElementById('vipTotal').textContent = `Total: $${vipTotal.toFixed(2)}`;
+      document.getElementById('vipTotalWithBonus').textContent = `Would be $${(vipTotal + vipBonus).toFixed(2)} with bonus individually`;
+      document.getElementById('vipMonthly').textContent = `$${vipMonthly.toFixed(2)} per month`;
+    }
+  </script>
 </body>
 </html>
